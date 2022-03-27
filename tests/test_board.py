@@ -1,7 +1,4 @@
 import pytest
-
-from path_calculator.classes import Settlement, Board, START_PORT, FINISH_PORT,\
-VILLAGE, CITY, WHITE, GREY
 from tests.test_board_construction import max_board_5, one_path_board, \
     simple_board
 

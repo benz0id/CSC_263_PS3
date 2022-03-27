@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from classes import Board, Settlement
+from path_calculator.classes import Board, Settlement
 
 
 class PathFinder:
@@ -72,17 +72,17 @@ class PathFinder:
     def _depth_first_walk_along(self, sett: Settlement) -> None:
         """From the current <sett>, recursively traverse every allowable path
         to the finish port. Increment counter whenever a new path is found."""
+        # Add this node to the current path.
+        if self._record_paths:
+            self._cur_path.append(sett)
 
         # We've reached the finish port. This path is complete.
         if sett.is_finish():
             self._num_paths_found += 1
             if self._record_paths:
                 self._paths.append(self._cur_path[:])
+                self._cur_path.pop()
             return
-
-        # Add this node to the current path.
-        if self._record_paths:
-            self._cur_path.append(sett)
 
         # Don't return to this settlement in future traversals.
         if self._mode == 1:

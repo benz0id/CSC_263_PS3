@@ -236,11 +236,11 @@ class Board:
         return setts
 
     def get_white_neighbors(self, sett: Settlement) -> List[Settlement]:
-        """Returns all white neighbors of the given settlement."""
+        """Returns all white, non-start neighbors of the given settlement."""
         neighbors = self.get_adjacent_settlements(sett)
         white_neighbors = []
         for neighbor in neighbors:
-            if neighbor.is_white():
+            if neighbor.is_white() and not neighbor.is_start():
                 white_neighbors.append(neighbor)
         return white_neighbors
 
