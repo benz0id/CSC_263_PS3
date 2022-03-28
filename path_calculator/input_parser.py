@@ -1,6 +1,7 @@
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 from path_calculator.classes import Board, Settlement
+
 """
 
 Contains functions required to parse an input file into a board.
@@ -36,7 +37,7 @@ class MisalignedParserError(Exception):
     pass
 
 
-def extract_settlement(settlements: List[Settlement], line: str,
+def extract_settlement(settlements: Dict[int, Settlement], line: str,
                        ind: int) -> None:
     """Extracts a settlement from the given <line>."""
     if '@' not in line:
@@ -44,15 +45,12 @@ def extract_settlement(settlements: List[Settlement], line: str,
 
         # Extract data and construct Settlement object.
     s_id, name, s_type = line.split('@')
-    settlements.append(Settlement(name, s_type))
-
-    if not int(s_id) == len(settlements) - 1:
-        raise MisalignedParserError("Misaligned on line " + str(ind))
+    settlements[int(s_id)] = (Settlement(name, s_type))
 
 
-def extract_roads(settlements: List[Settlement],
-                 roads: List[Tuple[Settlement, Settlement]],
-                 line: str, ind: int) -> None:
+def extract_roads(settlements: Dict[int, Settlement],
+                  roads: List[Tuple[Settlement, Settlement]],
+                  line: str, ind: int) -> None:
     """Extracts a road from the given <line>."""
     if ':' not in line:
         raise MisalignedParserError("Misaligned on line " + str(ind))
@@ -80,11 +78,8 @@ def parse_board(lines: List[str]) -> Board:
     """Parses an input (see example above for formatting) and returns it as a
     Board object."""
 
-    for i, s in enumerate(lines):
-        lines[i] = s.strip()
-
-    # A list of settlement objects.
-    settlements = []
+    # A list of settlement objects. id: Settlement.
+    settlements = {}
     # A list of tuples of 2 settlements, representing a road.
     roads = []
     # Start in portion containing settlement info.
@@ -108,5 +103,21 @@ def parse_board(lines: List[str]) -> Board:
         else:
             extract_roads(settlements, roads, line, ind)
 
+    # Extract settlements.
+    settlement_list = list(settlements.values())
+
     # There may exist duplicate roads. Max 2n^2 to add.
-    return Board(settlements, roads)
+    return Board(settlement_list, roads)
+
+
+def get_board(fp: str) -> Board:
+    """Extracts the board from the specification file at the given filepath."""
+    fp = fp.strip()
+
+    # Extract file contents and filter a bit.
+    with open(fp, 'r') as txt_file:
+        lines = txt_file.readlines()
+    for i, s in enumerate(lines):
+        lines[i] = s.strip()
+
+    return parse_board(lines)

@@ -1,11 +1,11 @@
-from path_calculator.find_paths import PathFinder
+from path_calculator.pathfinder import PathFinder
 from tests.test_board_construction import max_board_5, one_path_board, \
     simple_board
 
 
 def vis_paths(pf: PathFinder) -> None:
     """Prints a string representation of the paths found by the given <pf>."""
-    num, paths = pf._get_paths()
+    num, paths = pf.get_paths()
     print(num)
 
     for path in paths:

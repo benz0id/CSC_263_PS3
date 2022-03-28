@@ -1,0 +1,24 @@
+# A simple demo input file.
+# Lines with '#' are considered comments.
+
+# The specifications for the settlements.
+0@InPort@SP
+1@Pallet@V
+2@Viridian@V
+3@Pewter@C
+4@Cerulean@V
+5@Vermilion@C
+6@Lavender@V
+7@OutPort@FP
+
+# Demarcation line.
+==============
+
+# Linked list representation of roads. No redundancy. 13 roads.
+0: 1, 2
+1: 2, 7
+2: 3, 4
+3: 4, 6
+4: 5, 6
+5: 6, 7
+6: 7

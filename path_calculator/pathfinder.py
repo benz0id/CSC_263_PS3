@@ -36,7 +36,8 @@ class PathFinder:
     _cur_path: List[Settlement]
     _paths: List[List[Settlement]]
 
-    def __init__(self, board: Board, mode: int) -> None:
+    def __init__(self, board: Board, mode: int,
+                 record_paths: bool = False) -> None:
         """Initialises a pathfinder ready to find all paths through the given
         <board>. Will only traverse the board according to the rules
         specified by <mode>. """
@@ -44,11 +45,11 @@ class PathFinder:
         self._passport_used = False
         self._num_paths_found = 0
         self._mode = mode
-        self._record_paths = False
+        self._record_paths = record_paths
         self._cur_path = []
         self._paths = []
 
-    def find_paths(self) -> int:
+    def find_num_paths(self) -> int:
         """Returns the number of paths from the start port to the finish port
         using the given traversal rules."""
         start_port = self._board.start_port
@@ -57,12 +58,12 @@ class PathFinder:
         self._num_paths_found = 0
         return rtrn
 
-    def _get_paths(self) -> Tuple[int, List[List[Settlement]]]:
+    def get_paths(self) -> Tuple[int, List[List[Settlement]]]:
         """Returns the number of paths from the start port to the finish port
         using the given traversal rules. Also returns the contents of each path.
         To be used for debugging."""
         self._record_paths = True
-        num_paths = self.find_paths()
+        num_paths = self.find_num_paths()
         rtrn = num_paths, self._paths
         self._record_paths = False
         self._cur_path = []
@@ -126,3 +127,35 @@ class PathFinder:
         for adj_sett in adj_setts:
             self._depth_first_walk_along(adj_sett)
         self._passport_used = False
+
+
+def paths_to_str(paths: List[List[Settlement]]) -> str:
+    """Prints a string representation of the paths found by the given <pf>."""
+    rtrn = ''
+    for i, path in enumerate(paths):
+        s = '    Path ' + str(i) + ': '
+        for sett in path:
+            s += str(sett) + ' -> '
+        s = s[:-4] + '\n\n'
+        rtrn += s
+
+    return rtrn
+
+
+def find_and_print_paths(board: Board, print_paths: bool) -> None:
+    """Finds all the given paths along a board and prints a string
+    representation of the results. Will print the paths found iff
+    <print_paths>."""
+
+    # Compute and print for each mode.
+    for mode in (1, 2, 3):
+        pf = PathFinder(board, mode, record_paths=print_paths)
+
+        # Include traversed paths if requested.
+        if not print_paths:
+            num_found = pf.find_num_paths()
+            print('MODE 1: ' + str(num_found))
+        else:
+            num_found, paths = pf.get_paths()
+            print('MODE 1: ' + str(num_found))
+            print(paths_to_str(paths))
