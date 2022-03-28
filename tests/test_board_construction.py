@@ -1,7 +1,6 @@
 
-from path_calculator.input_parser import get_board, parse_board
-from path_calculator.classes import Settlement, Board, START_PORT, FINISH_PORT, \
-    VILLAGE, CITY, WHITE, GREY
+from path_calculator.Routes import get_board, parse_board, Settlement, Board, \
+    START_PORT, FINISH_PORT, VILLAGE, CITY, WHITE, GREY
 import os
 
 TEST_PATH = os.path.dirname(__file__) + '/../'

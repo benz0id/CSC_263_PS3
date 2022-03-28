@@ -1,4 +1,4 @@
-from path_calculator.pathfinder import PathFinder
+from path_calculator.Routes import PathFinder
 from tests.test_board_construction import *
 
 def test_one_path_board() -> None:
