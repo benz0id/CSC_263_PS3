@@ -492,7 +492,7 @@ def paths_to_str(paths: List[List[Settlement]]) -> str:
     for i, path in enumerate(paths):
         s = '    Path ' + str(i) + ': '
         for sett in path:
-            s += str(sett) + ' -> '
+            s += sett.name + ' -> '
         s = s[:-4] + '\n\n'
         rtrn += s
 
