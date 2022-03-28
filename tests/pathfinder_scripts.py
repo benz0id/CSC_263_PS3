@@ -1,6 +1,5 @@
-from path_calculator.Routes import PathFinder
-from tests.test_board_construction import max_board_5, one_path_board, \
-    simple_board
+from Routes import PathFinder
+from tests.test_board_construction import simple_board
 
 
 def vis_paths(pf: PathFinder) -> None:

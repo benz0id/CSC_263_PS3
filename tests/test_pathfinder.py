@@ -1,4 +1,4 @@
-from path_calculator.Routes import PathFinder
+from Routes import PathFinder
 from tests.test_board_construction import *
 
 def test_one_path_board() -> None:
@@ -26,18 +26,6 @@ def test_simple_board() -> None:
     pf = PathFinder(board, 3)
     assert pf.find_num_paths() == 39
 
-def test_simple_board() -> None:
-    """Tests that the correct number of paths are found on a cross setting for
-    each of the three modes."""
-    board = x_board
-    pf = PathFinder(board, 1)
-    assert pf.find_num_paths() == 2
-
-    pf = PathFinder(board, 2)
-    assert pf.find_num_paths() == 4
-
-    pf = PathFinder(board, 3)
-    assert pf.find_num_paths() == 4
 
 
 
