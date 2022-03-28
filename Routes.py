@@ -510,11 +510,12 @@ def find_and_print_paths(board: Board, print_paths: bool) -> None:
 
         # Include traversed paths if requested.
         if not print_paths:
+            # Default settings.
             num_found = pf.find_num_paths()
-            print('MODE 1: ' + str(mode))
+            print('MODE {i}: {n}'.format(i=mode, n=num_found))
         else:
             num_found, paths = pf.get_paths()
-            print('MODE 1: ' + str(mode))
+            print('MODE {i}: {n}'.format(i=mode, n=num_found))
             print(paths_to_str(paths))
 
 
