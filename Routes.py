@@ -65,7 +65,7 @@ class Settlement:
         return self.name + ': ' + str(self.ID)
 
     def __eq__(self, other) -> bool:
-        """Returns whether <self> and <other> these are the same settlement."""
+        """Returns whether <self> and <other> are the same settlement."""
         cond1 = self.ID == other.ID
         cond2 = self.name == other.name
         cond3 = self.s_type == other.s_type
@@ -98,13 +98,10 @@ class Settlement:
     def is_village(self) -> bool:
         return self.s_type == VILLAGE
 
-    def is_city(self) -> bool:
-        return self.s_type == CITY
-
 
 class Board:
     """A class representing a game-ready board. Stores the settlements on the
-    board and any roads between those settlements.
+    board and any roads that may exist between those settlements.
 
     === Public Attributes ===
     settlements:
@@ -133,7 +130,7 @@ class Board:
 
     def __init__(self, settlements: List[Settlement],
                  roads: List[Tuple[Settlement, Settlement]]) -> None:
-        """Initialises an empty board."""
+        """Initialises a board from the given <settlements> and <roads>."""
         self._max_set_id = -1
         # Construct settlements.
         self.settlements = []
@@ -154,9 +151,8 @@ class Board:
                         raise ValueError('Two cities cannot be connected.')
 
     def _init_settlements(self, settlements: List[Settlement]) -> None:
-        """Initialises the board with the given settlements. Clears the
-        current settlements. """
-
+        """Clears the current settlements. Initialises the board with the given
+        settlements. """
         # Add all settlements and locate start port. Ensure that there exist
         # exactly one start and one finish port.
         start_found = False
@@ -410,7 +406,7 @@ class PathFinder:
         """Returns the number of paths from the start port to the finish port
         using the given traversal rules."""
         start_port = self._board.start_port
-        self._depth_first_walk_along(start_port)
+        self._depth_first_complete_traversal(start_port)
         rtrn = self._num_paths_found
         self._num_paths_found = 0
         return rtrn
@@ -427,7 +423,7 @@ class PathFinder:
         self._paths = []
         return rtrn
 
-    def _depth_first_walk_along(self, sett: Settlement) -> None:
+    def _depth_first_complete_traversal(self, sett: Settlement) -> None:
         """From the current <sett>, recursively traverse every allowable path
         to the finish port. Increment counter whenever a new path is found."""
         # Add this node to the current path.
@@ -453,7 +449,7 @@ class PathFinder:
 
         # Recurse to each adjacent vertex that isn't grey.
         for adj_sett in self._board.get_white_neighbors(sett):
-            self._depth_first_walk_along(adj_sett)
+            self._depth_first_complete_traversal(adj_sett)
 
         # Try to use the passport if it's available.
         self._try_to_use_passport(sett)
@@ -482,7 +478,7 @@ class PathFinder:
         adj_setts = self._board.get_grey_village_neighbors(sett)
         self._passport_used = True
         for adj_sett in adj_setts:
-            self._depth_first_walk_along(adj_sett)
+            self._depth_first_complete_traversal(adj_sett)
         self._passport_used = False
 
 
