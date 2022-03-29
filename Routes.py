@@ -288,8 +288,8 @@ def extract_roads(settlements: Dict[int, Settlement],
         raise MisalignedParserError("Misaligned on line " + str(ind))
 
         # The settlement from which the roads 'leave'.
-    out_sett_str = line[0]
-    line = line[2:]
+    out_sett_str = line.split(':')[0]
+    line = line.split(':')[1]
     out_sett = settlements[int(out_sett_str)]
 
     # The settlements to which out_sett is connected. Extract indices
@@ -423,9 +423,17 @@ class PathFinder:
         self._paths = []
         return rtrn
 
+    iters: int = 0
     def _depth_first_complete_traversal(self, sett: Settlement) -> None:
         """From the current <sett>, recursively traverse every allowable path
         to the finish port. Increment counter whenever a new path is found."""
+        # DEBUG TODO REMOVE
+        self.iters += 1
+        if self.iters > len(self._board.get_all_roads()) ** 4:
+            return
+
+
+
         # Add this node to the current path.
         if self._record_paths:
             self._cur_path.append(sett)
@@ -495,10 +503,12 @@ def paths_to_str(paths: List[List[Settlement]]) -> str:
     return rtrn
 
 
-def find_and_print_paths(board: Board, print_paths: bool) -> None:
+def find_and_print_paths(board: Board, print_paths: bool) \
+        -> Tuple[int, ...]:
     """Finds all the given paths along a board and prints a string
     representation of the results. Will print the paths found iff
     <print_paths>."""
+    num_paths = []
 
     # Compute and print for each mode.
     for mode in (1, 2, 3):
@@ -513,6 +523,9 @@ def find_and_print_paths(board: Board, print_paths: bool) -> None:
             num_found, paths = pf.get_paths()
             print('MODE {i}: {n}'.format(i=mode, n=num_found))
             print(paths_to_str(paths))
+        num_paths.append(num_found)
+
+    return tuple(num_paths)
 
 
 if __name__ == '__main__':
